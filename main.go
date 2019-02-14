@@ -13,7 +13,9 @@ func main() {
     region := "us-east-2"
     awsSession := aws.CreateAwsSession(region)
     for _, alias := range os.Args[1:] {
-      cloudfront.DeleteDistribution(alias, awsSession)
+      if alias != "--" {
+        cloudfront.DeleteDistribution(alias, awsSession)
+      }
     }
   }
 }
