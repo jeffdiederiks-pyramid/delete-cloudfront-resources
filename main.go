@@ -1,12 +1,23 @@
 package main
 
 import (
-  "time"
   "os"
+  "time"
+  "github.com/PyramidSystemsInc/go/aws"
+  "github.com/PyramidSystemsInc/go/aws/cloudfront"
 )
 
 func main() {
-  FORTY_FIVE_MINUTES = 45 * 60 * 1000 * time.Millisecond
-  time.Sleep(FORTY_FIVE_MINUTES)
-  os.Mkdir("/home/jeff/Desktop/I-Worked", 0755)
+  if len(os.Args) > 1 {
+    waitMinutes(45)
+    region := "us-east-2"
+    awsSession := aws.CreateAwsSession(region)
+    for _, alias := range os.Args[1:] {
+      cloudfront.DeleteDistribution(alias, awsSession)
+    }
+  }
+}
+
+func waitMinutes(minutes time.Duration) {
+  time.Sleep(minutes * 60 * 1000 * time.Millisecond)
 }
